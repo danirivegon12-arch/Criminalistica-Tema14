@@ -3,161 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tema 14: Criminalística - Rivera & Gutiérrez</title>
+    <title>Criminalística Tema 14 - Rivera & Gutiérrez</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@300;500&display=swap');
         
         :root {
-            --forensic-yellow: #fbbf24;
-            --forensic-blue: #3b82f6;
-            --forensic-dark: #020617;
+            --neon-blue: #00f2ff;
+            --neon-yellow: #f0ff00;
+            --neon-red: #ff0055;
+            --bg-dark: #050505;
         }
 
         body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--forensic-dark);
-            background-image: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%);
-            color: #f8fafc;
+            font-family: 'JetBrains Mono', monospace; 
+            background-color: var(--bg-dark);
+            background-image: 
+                linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            color: #e2e8f0;
         }
 
         .font-header { font-family: 'Orbitron', sans-serif; }
         
-        .glass-card {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        .cyber-card {
+            background: rgba(10, 10, 15, 0.9);
+            border: 2px solid #1e293b;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 242, 255, 0.05);
+            position: relative;
         }
 
-        .option-btn {
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        .cyber-card::before {
+            content: "";
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, var(--neon-blue), transparent, var(--neon-yellow));
+            z-index: -1;
+            border-radius: inherit;
+            opacity: 0.3;
         }
 
-        .option-btn:hover:not(:disabled) {
-            background: rgba(59, 130, 246, 0.15);
-            border-color: var(--forensic-blue);
-            transform: translateX(8px);
+        .btn-option {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
         }
 
-        .caution-tape {
+        .btn-option:hover:not(:disabled) {
+            background: rgba(0, 242, 255, 0.1);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        .caution-bar {
             background: repeating-linear-gradient(
-                -45deg,
-                #fbbf24,
-                #fbbf24 20px,
-                #000 20px,
-                #000 40px
+                45deg,
+                var(--neon-yellow),
+                var(--neon-yellow) 15px,
+                #000 15px,
+                #000 30px
             );
         }
 
-        .animate-pulse-slow {
-            animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        .scanner-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: var(--neon-blue);
+            opacity: 0.5;
+            box-shadow: 0 0 10px var(--neon-blue);
+            animation: scan 3s linear infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: .7; }
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
         }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
 
-    <!-- App Container -->
-    <div id="app" class="max-w-3xl w-full glass-card rounded-[2.5rem] overflow-hidden">
+    <div id="app" class="max-w-3xl w-full cyber-card rounded-3xl overflow-hidden">
         
-        <!-- PANTALLA DE INICIO (INTRO) -->
-        <div id="intro-screen" class="p-10 text-center animate-fade-in">
-            <div class="caution-tape h-4 w-full mb-8 rounded-full opacity-80"></div>
+        <!-- PANTALLA INICIAL -->
+        <div id="intro-screen" class="p-8 md:p-12 text-center">
+            <div class="caution-bar h-6 w-full mb-8 rounded-lg shadow-lg"></div>
             
-            <div class="mb-10">
-                <p class="font-header text-blue-500 font-bold tracking-[0.3em] text-xs mb-3 animate-pulse-slow">SISTEMA DE EVALUACIÓN TÉCNICA</p>
-                <h1 class="font-header text-5xl font-bold text-white mb-4 tracking-tighter">
-                    TEMA <span class="text-blue-500">14</span>
-                </h1>
-                <h2 class="text-2xl font-light text-slate-300 tracking-tight">Conceptos Metodológicos de la Investigación</h2>
-                <div class="h-1 w-20 bg-blue-600 mx-auto mt-6 rounded-full"></div>
+            <h2 class="text-blue-400 font-bold tracking-widest text-xs mb-4">CRIMINALÍSTICA CIENTÍFICA</h2>
+            <h1 class="font-header text-5xl md:text-6xl font-extrabold text-white mb-4 tracking-tighter">
+                TEMA <span class="text-yellow-400">14</span>
+            </h1>
+            <p class="text-slate-400 text-sm md:text-base mb-10 max-w-md mx-auto">
+                Evaluación Metodológica de Investigación y Protocolos Forenses
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10 text-left">
+                <div class="bg-blue-900/10 border border-blue-500/30 p-5 rounded-2xl">
+                    <span class="text-[10px] text-blue-500 font-bold block mb-1">CATEDRÁTICO/INVESTIGADOR</span>
+                    <span class="text-white font-bold">Juan Daniel Rivera Gonzalez</span>
+                </div>
+                <div class="bg-blue-900/10 border border-blue-500/30 p-5 rounded-2xl">
+                    <span class="text-[10px] text-blue-500 font-bold block mb-1">CATEDRÁTICO/INVESTIGADOR</span>
+                    <span class="text-white font-bold">Ricardo Gutiérrez Acevedo</span>
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-                <div class="bg-slate-900/60 p-6 rounded-3xl border border-white/5 backdrop-blur-sm">
-                    <p class="text-blue-400 text-[10px] font-bold uppercase tracking-widest mb-1">Perito Investigador</p>
-                    <p class="text-white text-lg font-semibold">Juan Daniel Rivera Gonzalez</p>
-                </div>
-                <div class="bg-slate-900/60 p-6 rounded-3xl border border-white/5 backdrop-blur-sm">
-                    <p class="text-blue-400 text-[10px] font-bold uppercase tracking-widest mb-1">Perito Investigador</p>
-                    <p class="text-white text-lg font-semibold">Ricardo Gutiérrez Acevedo</p>
-                </div>
-            </div>
-
-            <button onclick="startQuiz()" class="group relative px-16 py-6 bg-blue-600 rounded-2xl overflow-hidden transition-all hover:bg-blue-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] active:scale-95">
-                <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform"></div>
-                <span class="relative font-header font-bold text-xl text-white">INICIAR QUIZ</span>
+            <button onclick="startQuiz()" class="w-full bg-blue-600 hover:bg-cyan-500 text-white font-header font-bold py-6 rounded-2xl shadow-[0_0_30px_rgba(37,99,235,0.4)] transition-all active:scale-95 group">
+                INICIAR PROTOCOLO TEMA 14
             </button>
-            
-            <p class="mt-10 text-slate-500 text-[10px] uppercase tracking-[0.4em] font-medium">Laboratorio de Criminalística Avanzada</p>
         </div>
 
-        <!-- INTERFAZ DEL QUIZ -->
+        <!-- INTERFAZ DE PREGUNTAS -->
         <div id="quiz-ui" class="hidden">
-            <!-- Header -->
-            <div class="bg-slate-900/50 p-6 border-b border-white/5 flex justify-between items-center backdrop-blur-md">
+            <div class="bg-slate-900/80 p-6 border-b border-slate-800 flex justify-between items-center">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center font-header text-blue-400 font-bold text-xl">
-                        <span id="q-num-display">1</span>
-                    </div>
+                    <div class="text-2xl font-header font-bold text-yellow-400">#<span id="q-idx">1</span></div>
+                    <div class="h-8 w-px bg-slate-700"></div>
                     <div>
-                        <p class="text-white font-bold text-sm tracking-wide">TEMA 14: CRIMINALÍSTICA</p>
-                        <p class="text-slate-500 text-[10px] tracking-widest uppercase">Protocolo Rivera & Gutiérrez</p>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Procedimiento Pericial</p>
+                        <p class="text-white text-xs font-bold">Rivera & Gutiérrez</p>
                     </div>
                 </div>
-                <div class="bg-black/40 px-5 py-3 rounded-2xl border border-white/5">
-                    <span class="text-blue-400 font-header text-2xl" id="score-display">0</span>
-                    <span class="text-slate-600 font-header text-sm">/ 10</span>
+                <div class="text-right">
+                    <p class="text-[10px] text-blue-500 font-bold">PRECISIÓN</p>
+                    <p class="text-2xl font-header font-bold text-white"><span id="score-val">0</span>/10</p>
                 </div>
             </div>
 
-            <!-- Barra de Progreso -->
-            <div class="w-full bg-black/40 h-1">
-                <div id="progress" class="bg-blue-500 h-full w-0 transition-all duration-700 ease-out shadow-[0_0_10px_#3b82f6]"></div>
+            <div class="w-full bg-slate-800 h-1">
+                <div id="progress-bar" class="h-full bg-cyan-400 shadow-[0_0_10px_#00f2ff] transition-all duration-500"></div>
             </div>
 
-            <div class="p-8">
-                <!-- Imagen SVG de Alta Fidelidad -->
-                <div id="question-image" class="w-full h-60 bg-black/20 rounded-[2rem] mb-8 flex items-center justify-center border border-white/5 relative group overflow-hidden">
-                    <!-- SVG dinámico -->
+            <div class="p-6 md:p-8">
+                <div id="img-container" class="w-full h-52 bg-black/40 rounded-2xl mb-8 flex items-center justify-center border border-slate-800 relative overflow-hidden">
+                    <div class="scanner-line"></div>
+                    <!-- SVG dinámico aquí -->
                 </div>
 
-                <h2 id="question-text" class="text-2xl font-semibold text-white mb-8 leading-tight tracking-tight">Cargando...</h2>
+                <h3 id="question-txt" class="text-xl md:text-2xl font-bold text-white mb-8 leading-tight">...</h3>
 
-                <div id="options-container" class="grid grid-cols-1 gap-3">
-                    <!-- Opciones generadas por JS -->
+                <div id="options-box" class="grid grid-cols-1 gap-3">
+                    <!-- 5 Opciones aquí -->
                 </div>
             </div>
 
-            <!-- Feedback Area -->
-            <div id="feedback" class="hidden p-8 pt-0 animate-fade-in">
-                <div id="feedback-box" class="p-6 rounded-3xl border-l-4 mb-6 transition-all"></div>
-                <button onclick="nextQuestion()" class="w-full bg-white text-black py-5 rounded-2xl font-bold text-lg hover:bg-blue-50 transition-all shadow-2xl active:scale-98">
-                    CONTINUAR →
+            <div id="feedback-area" class="hidden px-8 pb-8 animate-fade-in">
+                <div id="feedback-box" class="p-5 rounded-2xl border-l-4 mb-6"></div>
+                <button onclick="nextQ()" class="w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-cyan-400 transition-colors">
+                    SIGUIENTE FASE →
                 </button>
             </div>
         </div>
 
-        <!-- RESULTADOS FINALES -->
-        <div id="results-screen" class="hidden p-12 text-center animate-fade-in">
-            <div class="caution-tape h-2 w-32 mx-auto mb-10 rounded-full opacity-50"></div>
-            <h2 class="font-header text-4xl font-bold text-white mb-2">INFORME PERICIAL</h2>
-            <p class="text-slate-500 text-sm mb-10 tracking-widest uppercase">Resultado de la Evaluación Técnica</p>
-            
-            <div class="inline-block p-12 rounded-[3rem] border-2 border-blue-500/30 bg-blue-500/5 mb-10 relative">
-                <div class="text-7xl font-header font-bold text-white mb-2" id="final-score">0/10</div>
-                <div class="bg-blue-600 px-6 py-1.5 rounded-full text-[10px] font-bold text-white tracking-widest uppercase shadow-lg">EFICACIA</div>
+        <!-- RESULTADOS -->
+        <div id="results" class="hidden p-12 text-center">
+            <div class="caution-bar h-2 w-24 mx-auto mb-10 rounded-full"></div>
+            <h2 class="font-header text-4xl font-bold text-white mb-2">INFORME FINAL</h2>
+            <div class="inline-block p-12 rounded-full border-2 border-cyan-500/30 bg-cyan-500/5 mb-8">
+                <div class="text-7xl font-header font-bold text-white" id="final-score">0</div>
+                <div class="text-cyan-500 font-bold text-xs tracking-widest">ACIERTOS</div>
             </div>
-            
-            <p id="result-text" class="text-slate-300 mb-12 max-w-sm mx-auto leading-relaxed text-lg"></p>
-            
-            <button onclick="resetQuiz()" class="w-full border border-white/10 text-slate-400 py-5 rounded-2xl font-bold hover:bg-white/5 transition-all text-sm tracking-widest">
-                REINICIAR PROTOCOLO TEMA 14
+            <p id="result-msg" class="text-slate-400 mb-10 italic"></p>
+            <button onclick="location.reload()" class="w-full border border-slate-700 py-4 rounded-xl text-slate-400 font-bold hover:bg-slate-900 transition">
+                REINICIAR EVALUACIÓN
             </button>
         </div>
     </div>
@@ -165,84 +175,134 @@
     <script>
         const questions = [
             {
-                q: "¿Qué pilares metodológicos establece la Tesis Jurisprudencial para validar la ciencia en juicio?",
-                // Imagen: Pilares de un templo griego/justicia
-                img: `<svg viewBox="0 0 200 120" class="h-48 w-full"><rect x="30" y="90" width="140" height="10" fill="#334155"/><rect x="45" y="40" width="15" height="50" fill="#3b82f6" opacity="0.8"/><rect x="92" y="40" width="15" height="50" fill="#3b82f6" opacity="0.8"/><rect x="140" y="40" width="15" height="50" fill="#3b82f6" opacity="0.8"/><rect x="40" y="30" width="120" height="10" fill="#fbbf24"/></svg>`,
-                options: ["Opinión experta y antigüedad del perito", "Experimentación empírica, error conocido y aceptación científica", "Subjetividad y libertad absoluta de criterio"],
-                correct: 1,
-                explanation: "La Tesis 1a. CLXXXVII/2006 garantiza que solo la ciencia validada y medible entre al proceso penal."
+                q: "¿Qué pilares exige la Tesis 1a. CLXXXVII/2006 para validar la prueba científica?",
+                img: `<svg viewBox="0 0 200 120" class="h-40"><path d="M40 100 L160 100" stroke="#334" stroke-width="4"/><rect x="55" y="40" width="10" height="60" fill="#00f2ff"/><rect x="95" y="30" width="10" height="70" fill="#00f2ff"/><rect x="135" y="50" width="10" height="50" fill="#00f2ff"/><path d="M40 30 L160 30" stroke="#f0ff00" stroke-width="2"/></svg>`,
+                options: [
+                    "Experiencia empírica, error conocido y aceptación científica", // Correcta
+                    "Buena fe del perito, años de servicio y cargo institucional",
+                    "Cantidad de testigos, rapidez de entrega y costo del análisis",
+                    "Opinión subjetiva del juez y consenso de la fiscalía",
+                    "Uso de tecnología de punta exclusivamente"
+                ],
+                correct: 0,
+                exp: "El estándar Daubert/Tesis exige verificabilidad, margen de error y validación por pares."
             },
             {
-                q: "En la ecuación probatoria del Tema 14, ¿qué transforma el indicio en evidencia legal?",
-                // Imagen: Tubo de ensayo transformando materia
-                img: `<svg viewBox="0 0 200 120" class="h-48 w-full"><path d="M70 20 L70 90 A10 10 0 0 0 90 90 L90 20" stroke="#94a3b8" stroke-width="4" fill="none"/><path d="M74 60 L86 60 L86 86 A6 6 0 0 1 74 86 Z" fill="#3b82f6"/><path d="M110 55 L140 55" stroke="#fbbf24" stroke-width="3" stroke-dasharray="4" marker-end="url(#arrow)"/></svg>`,
-                options: ["La simple voluntad del juez", "El análisis científico + Cadena de Custodia", "El tiempo transcurrido desde el hecho"],
+                q: "Dentro de la Trilogía Investigadora, ¿quién ejerce la Conducción Jurídica?",
+                img: `<svg viewBox="0 0 200 120" class="h-40"><circle cx="100" cy="50" r="30" fill="none" stroke="#00f2ff" stroke-width="2" stroke-dasharray="5"/><text x="100" y="55" text-anchor="middle" fill="#00f2ff" font-size="10">M.P.</text><circle cx="60" cy="90" r="15" fill="#334"/><circle cx="140" cy="90" r="15" fill="#334"/></svg>`,
+                options: [
+                    "Los Peritos Forenses",
+                    "El Ministerio Público", // Correcta
+                    "La Policía de Investigación",
+                    "El Juez de Control",
+                    "El Asesor Jurídico de la víctima"
+                ],
                 correct: 1,
-                explanation: "El indicio requiere un análisis riguroso y la garantía de preservación (Cadena de Custodia) para ser dato de prueba."
+                exp: "El MP dirige jurídicamente, la Policía opera y los Peritos aportan la técnica científica."
             },
             {
-                q: "¿Cuál es la consecuencia de una 'Falla Tolerable' en la Cadena de Custodia?",
-                // Imagen: Documento con pequeño detalle vs gran error
-                img: `<svg viewBox="0 0 200 120" class="h-48 w-full"><rect x="70" y="30" width="60" height="70" fill="#1e293b" stroke="#334155"/><path d="M80 50 L120 50 M80 65 L120 65" stroke="#3b82f6" stroke-width="2"/><circle cx="125" cy="35" r="8" fill="#fbbf24"/><text x="123" y="38" fill="black" font-size="10" font-weight="bold">!</text></svg>`,
-                options: ["Nulidad absoluta e inmediata", "Prueba admitida, pero credibilidad vulnerable", "No tiene ninguna consecuencia"],
-                correct: 1,
-                explanation: "Errores como tipografías u omisiones de folios no anulan la prueba, pero la debilitan ante el contrainterrogatorio."
+                q: "¿Cuál de estos eventos genera una Nulidad Absoluta de la prueba?",
+                img: `<svg viewBox="0 0 200 120" class="h-40"><rect x="30" y="40" width="140" height="40" fill="#ff0055" opacity="0.2"/><path d="M30 40 L170 80 M170 40 L30 80" stroke="#ff0055" stroke-width="5"/></svg>`,
+                options: [
+                    "Errores ortográficos en el etiquetado del indicio",
+                    "Omisión de la hora exacta de recolección",
+                    "Uso de embalaje subóptimo pero no destructivo",
+                    "Alteración deliberada de la escena o siembra de indicios", // Correcta
+                    "Falta de una firma en el folio de traslado"
+                ],
+                correct: 3,
+                exp: "La alteración deliberada rompe la trazabilidad y el debido proceso de forma irreparable."
             },
             {
-                q: "¿Qué tipo de fotografía forense utiliza el 'testigo métrico' para dar escala real?",
-                // Imagen: Regla junto a un objeto
-                img: `<svg viewBox="0 0 200 120" class="h-48 w-full"><rect x="40" y="70" width="120" height="15" fill="#fbbf24"/><path d="M45 70 L45 85 M65 70 L65 80 M85 70 L85 85" stroke="black" stroke-width="1"/><circle cx="100" cy="40" r="15" fill="#3b82f6"/></svg>`,
-                options: ["Fotografía Panorámica", "Primeros Planos y Macrofotografía", "Fotografía General"],
+                q: "En fotografía forense, ¿para qué sirve específicamente el Testigo Métrico?",
+                img: `<svg viewBox="0 0 200 120" class="h-40"><rect x="50" y="80" width="100" height="15" fill="#f0ff00"/><path d="M60 80 v15 M80 80 v10 M100 80 v15" stroke="black" stroke-width="1"/><circle cx="100" cy="40" r="20" fill="#00f2ff"/></svg>`,
+                options: [
+                    "Para iluminar zonas con poca visibilidad",
+                    "Para dar una referencia de escala y dimensión real del indicio", // Correcta
+                    "Para identificar al perito que tomó la fotografía",
+                    "Para señalar la dirección del norte magnético",
+                    "Para evitar que la lente de la cámara se desenfoque"
+                ],
                 correct: 1,
-                explanation: "Para la fijación de indicios pequeños, la escala es vital para reconstruir dimensiones originales."
+                exp: "Sin escala, es imposible conocer el tamaño real de un indicio en una fotografía técnica."
             },
             {
-                q: "¿Qué fase de la balística estudia el vuelo parabólico y la gravedad?",
-                // Imagen: Proyectil volando en arco
-                img: `<svg viewBox="0 0 200 120" class="h-48 w-full"><path d="M30 90 Q 100 20 170 90" stroke="#3b82f6" stroke-width="2" fill="none" stroke-dasharray="4"/><path d="M30 90 L40 85" stroke="#fbbf24" stroke-width="3"/></svg>`,
-                options: ["Balística Interior", "Balística de Efectos", "Balística Exterior"],
+                q: "¿Qué estudia la Balística Exterior específicamente?",
+                img: `<svg viewBox="0 0 200 120" class="h-40"><path d="M20 100 Q 100 0 180 100" stroke="#00f2ff" stroke-width="2" fill="none" stroke-dasharray="5"/><circle cx="100" cy="25" r="4" fill="#f0ff00"/></svg>`,
+                options: [
+                    "La presión de gases dentro de la recámara",
+                    "Las marcas de la aguja percutora en el fulminante",
+                    "El vuelo del proyectil, trayectoria y efectos de la gravedad", // Correcta
+                    "Los daños causados en el cuerpo de la víctima",
+                    "La composición química de la pólvora incombusta"
+                ],
                 correct: 2,
-                explanation: "La balística exterior analiza la trayectoria desde que el proyectil abandona la boca del cañón."
+                exp: "Comienza cuando el proyectil sale del cañón y termina al impactar el objetivo."
             },
             {
-                q: "En tránsito terrestre, ¿qué es el 'Tiempo de Reacción Biomecánica'?",
-                // Imagen: Cronómetro y pie en pedal
-                img: `<svg viewBox="0 0 200 120" class="h-48 w-full"><circle cx="100" cy="60" r="35" stroke="#334155" stroke-width="5" fill="none"/><path d="M100 60 L100 35" stroke="#ef4444" stroke-width="3"/><text x="92" y="70" fill="white" font-size="8">0.75s</text></svg>`,
-                options: ["El tiempo que tarda el coche en detenerse", "El intervalo entre la detección del peligro y la acción física (0.75 a 1.5 seg)", "La velocidad final tras el impacto"],
+                q: "¿Qué caracteriza a una Huella de Derrape en hechos de tránsito?",
+                img: `<svg viewBox="0 0 200 120" class="h-40"><path d="M40 100 Q 100 100 160 40" stroke="#00f2ff" stroke-width="8" fill="none" stroke-dasharray="10"/></svg>`,
+                options: [
+                    "Neumático bloqueado arrastrando en línea recta",
+                    "Pérdida de adherencia por fuerza centrífuga lateral", // Correcta
+                    "Aceleración brusca desde el reposo",
+                    "Frenado intermitente con sistema ABS",
+                    "Impacto frontal contra objeto fijo"
+                ],
                 correct: 1,
-                explanation: "Es el tiempo humano necesario para procesar el peligro y pisar el freno; crucial para deslindar responsabilidades."
+                exp: "El derrape implica un desplazamiento lateral, a diferencia de la frenada que es longitudinal."
             },
             {
-                q: "¿Qué permite determinar el 'Arc Mapping' en una escena de incendio?",
-                // Imagen: Circuito con puntos de fusión
-                img: `<svg viewBox="0 0 200 120" class="h-48 w-full"><path d="M40 60 L160 60" stroke="#334155" stroke-width="2"/><circle cx="70" cy="60" r="6" fill="#fbbf24" opacity="0.8"/><circle cx="130" cy="60" r="6" fill="#fbbf24" opacity="0.8"/><path d="M70 60 Q 100 30 130 60" stroke="#3b82f6" stroke-width="1" fill="none"/></svg>`,
-                options: ["La temperatura del humo", "La secuencia cronológica de fallas eléctricas mediante perlas de fusión", "Si se usó gasolina o diesel"],
-                correct: 1,
-                explanation: "El mapeo de cortocircuitos ayuda a identificar si la falla eléctrica causó el incendio o fue consecuencia de él."
+                q: "En un incendio, ¿qué indica el vértice de un patrón en forma de 'V'?",
+                img: `<svg viewBox="0 0 200 120" class="h-40"><path d="M100 100 L50 20 M100 100 L150 20" stroke="#ff0055" stroke-width="4"/><circle cx="100" cy="100" r="5" fill="#f0ff00"/></svg>`,
+                options: [
+                    "El punto de origen o inicio del fuego", // Correcta
+                    "La zona de mayor acumulación de gases tóxicos",
+                    "El lugar donde se aplicó el extintor",
+                    "La marca de un acelerante líquido (gasolina)",
+                    "El punto de salida de las llamas al exterior"
+                ],
+                correct: 0,
+                exp: "El fuego tiende a subir y expandirse, dejando un vértice en el punto de ignición inicial."
             },
             {
-                q: "¿Cuál es el enfoque principal de la Grafoscopía?",
-                // Imagen: Mano escribiendo con líneas de fuerza
-                img: `<svg viewBox="0 0 200 120" class="h-48 w-full"><path d="M150 30 L80 90" stroke="#94a3b8" stroke-width="4"/><path d="M80 90 L60 95 L65 75 Z" fill="#3b82f6"/><path d="M90 60 Q 110 60 110 80" stroke="#fbbf24" stroke-width="2" fill="none"/></svg>`,
-                options: ["La materialidad inerte del papel", "La acción neuromuscular y el gesto gráfico involuntario", "La química de las tintas"],
-                correct: 1,
-                explanation: "Busca identificar al autor a través de movimientos automáticos cerebrales imposibles de enmascarar."
+                q: "¿Cuál es el fundamento científico de la Grafoscopía?",
+                img: `<svg viewBox="0 0 200 120" class="h-40"><path d="M40 80 L160 40" stroke="#00f2ff" stroke-width="2"/><path d="M150 40 Q 150 90 100 90" stroke="#f0ff00" stroke-width="1" fill="none"/></svg>`,
+                options: [
+                    "La calidad del papel y su gramaje",
+                    "La oxidación de las tintas comerciales",
+                    "El tipo de bolígrafo o pluma fuente utilizado",
+                    "La acción neuromuscular y automatismos cerebrales", // Correcta
+                    "El contenido literario y emocional del texto"
+                ],
+                correct: 3,
+                exp: "La escritura es un proceso cerebral automático; los gestos invisibles son imposibles de falsificar."
             },
             {
-                q: "Según el estándar INTERPOL, ¿cuál es un Identificador Primario?",
-                // Imagen: ADN y Huella dactilar
-                img: `<svg viewBox="0 0 200 120" class="h-48 w-full"><path d="M80 30 Q 100 30 100 60 Q 100 90 120 90" stroke="#3b82f6" stroke-width="3" fill="none"/><path d="M80 90 Q 100 90 100 60 Q 100 30 120 30" stroke="#fbbf24" stroke-width="3" fill="none"/></svg>`,
-                options: ["Tatuajes y cicatrices", "Dactiloscopía, ADN y Odontología Forense", "Joyas y pertenencias personales"],
-                correct: 1,
-                explanation: "Son métodos irrefutables e individualizantes por sí mismos para la identificación humana."
+                q: "Según Vucetich, ¿qué define a las huellas dactilares?",
+                img: `<svg viewBox="0 0 200 120" class="h-40"><path d="M100 20 C 60 20 60 100 100 100 C 140 100 140 20 100 20" stroke="#00f2ff" stroke-width="1" fill="none"/><circle cx="100" cy="60" r="3" fill="#f0ff00"/></svg>`,
+                options: [
+                    "Que se borran con el paso de los años",
+                    "Que son iguales en gemelos idénticos",
+                    "Que son perennes, inmutables y diversiformes", // Correcta
+                    "Que dependen de la alimentación de la persona",
+                    "Que solo se encuentran en los dedos de las manos"
+                ],
+                correct: 2,
+                exp: "No cambian, no se borran y no hay dos iguales en el mundo."
             },
             {
-                q: "¿Qué revela la Ninhidrina en superficies porosas como el papel?",
-                // Imagen: Pulverizador y cambio de color
-                img: `<svg viewBox="0 0 200 120" class="h-48 w-full"><rect x="80" y="40" width="40" height="60" fill="#1e293b"/><path d="M100 40 L100 30 M90 30 L110 30" stroke="#fbbf24"/><path d="M130 50 C 150 50 150 80 130 80" stroke="#a855f7" stroke-width="5" opacity="0.6"/></svg>`,
-                options: ["Grasas y sebos", "Aminoácidos del sudor (Púrpura de Ruhemann)", "Oxidación de la celulosa"],
-                correct: 1,
-                explanation: "La reacción química con los aminoácidos revela huellas latentes en documentos de forma permanente."
+                q: "¿Para qué sirve la Ninhidrina en dactiloscopía latente?",
+                img: `<svg viewBox="0 0 200 120" class="h-40"><path d="M80 40 h40 v60 h-40 z" fill="#334"/><path d="M130 50 c 20 0 20 40 0 40" stroke="#ff0055" stroke-width="4"/></svg>`,
+                options: [
+                    "Para revelar huellas en cristal o metal",
+                    "Para limpiar la escena de rastros biológicos",
+                    "Para fijar huellas de pisadas en lodo",
+                    "Para reaccionar con aminoácidos en papel (Púrpura de Ruhemann)", // Correcta
+                    "Para detectar rastros de explosivos C4"
+                ],
+                correct: 3,
+                exp: "Es el reactivo estándar para superficies porosas, revelando huellas invisibles en documentos."
             }
         ];
 
@@ -253,91 +313,81 @@
         function startQuiz() {
             document.getElementById('intro-screen').classList.add('hidden');
             document.getElementById('quiz-ui').classList.remove('hidden');
-            renderQuestion();
+            renderQ();
         }
 
-        function renderQuestion() {
+        function renderQ() {
             canAnswer = true;
             const q = questions[currentQ];
-            document.getElementById('q-num-display').innerText = currentQ + 1;
-            document.getElementById('question-text').innerText = q.q;
-            document.getElementById('question-image').innerHTML = q.img;
-            document.getElementById('progress').style.width = `${(currentQ / questions.length) * 100}%`;
+            document.getElementById('q-idx').innerText = currentQ + 1;
+            document.getElementById('question-txt').innerText = q.q;
+            document.getElementById('img-container').innerHTML = `<div class="scanner-line"></div>${q.img}`;
+            document.getElementById('progress-bar').style.width = `${(currentQ / questions.length) * 100}%`;
             
-            const container = document.getElementById('options-container');
-            container.innerHTML = '';
+            const box = document.getElementById('options-box');
+            box.innerHTML = '';
             
-            q.options.forEach((opt, index) => {
+            // Generar los 5 incisos
+            q.options.forEach((opt, i) => {
                 const btn = document.createElement('button');
-                btn.className = "option-btn w-full text-left p-5 rounded-3xl border border-white/5 bg-white/5 text-slate-300 font-medium flex items-center gap-4 group";
+                btn.className = "btn-option w-full text-left p-4 rounded-xl flex items-center gap-4 group";
                 btn.innerHTML = `
-                    <span class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-blue-400 font-bold border border-white/5 group-hover:border-blue-500/50 transition-all shrink-0">
-                        ${String.fromCharCode(65 + index)}
-                    </span>
-                    <span class="text-sm md:text-base">${opt}</span>
+                    <div class="w-10 h-10 rounded-lg bg-slate-900 border border-slate-700 flex items-center justify-center text-cyan-400 font-bold group-hover:border-cyan-400 transition-all shrink-0">
+                        ${String.fromCharCode(65 + i)}
+                    </div>
+                    <span class="text-sm md:text-base text-slate-300 group-hover:text-white transition-colors">${opt}</span>
                 `;
-                btn.onclick = () => checkAnswer(index, btn);
-                container.appendChild(btn);
+                btn.onclick = () => checkAns(i, btn);
+                box.appendChild(btn);
             });
 
-            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('feedback-area').classList.add('hidden');
         }
 
-        function checkAnswer(idx, btn) {
+        function checkAns(idx, btn) {
             if (!canAnswer) return;
             canAnswer = false;
 
             const q = questions[currentQ];
-            const feedbackBox = document.getElementById('feedback-box');
-            const feedbackArea = document.getElementById('feedback');
-            const buttons = document.querySelectorAll('.option-btn');
+            const fBox = document.getElementById('feedback-box');
+            const btns = document.querySelectorAll('.btn-option');
 
-            buttons.forEach(b => b.disabled = true);
+            btns.forEach(b => b.disabled = true);
 
             if (idx === q.correct) {
                 score++;
-                btn.classList.add('border-blue-500/50', 'bg-blue-500/10', 'text-white');
-                feedbackBox.className = "p-6 rounded-[2rem] border-l-4 bg-blue-500/5 border-blue-500 text-blue-100 shadow-inner";
-                feedbackBox.innerHTML = `<h3 class="font-bold text-blue-400 mb-1 tracking-widest text-xs">✓ HALLAZGO CONFIRMADO</h3><p class="text-sm opacity-80">${q.explanation}</p>`;
+                btn.classList.add('border-cyan-500', 'bg-cyan-500/10');
+                fBox.className = "p-5 rounded-2xl border-l-4 border-cyan-500 bg-cyan-500/5 text-cyan-100";
+                fBox.innerHTML = `<h4 class="font-bold mb-1 text-cyan-400 tracking-widest text-xs">VALIDACIÓN EXITOSA</h4><p class="text-sm opacity-80">${q.exp}</p>`;
             } else {
-                btn.classList.add('border-red-500/50', 'bg-red-500/10', 'text-white');
-                buttons[q.correct].classList.add('border-blue-500/30', 'bg-blue-500/5');
-                feedbackBox.className = "p-6 rounded-[2rem] border-l-4 bg-red-500/5 border-red-500 text-red-100";
-                feedbackBox.innerHTML = `<h3 class="font-bold text-red-400 mb-1 tracking-widest text-xs">✗ ERROR METODOLÓGICO</h3><p class="text-sm opacity-80">${q.explanation}</p>`;
+                btn.classList.add('border-red-500', 'bg-red-500/10');
+                btns[q.correct].classList.add('border-cyan-500/40', 'bg-cyan-500/5');
+                fBox.className = "p-5 rounded-2xl border-l-4 border-red-500 bg-red-500/5 text-red-100";
+                fBox.innerHTML = `<h4 class="font-bold mb-1 text-red-400 tracking-widest text-xs">DISCREPANCIA METODOLÓGICA</h4><p class="text-sm opacity-80">${q.exp}</p>`;
             }
 
-            document.getElementById('score-display').innerText = score;
-            feedbackArea.classList.remove('hidden');
+            document.getElementById('score-val').innerText = score;
+            document.getElementById('feedback-area').classList.remove('hidden');
         }
 
-        function nextQuestion() {
+        function nextQ() {
             currentQ++;
             if (currentQ < questions.length) {
-                renderQuestion();
+                renderQ();
             } else {
-                showResults();
+                showFinal();
             }
         }
 
-        function showResults() {
+        function showFinal() {
             document.getElementById('quiz-ui').classList.add('hidden');
-            const resultsScreen = document.getElementById('results-screen');
-            resultsScreen.classList.remove('hidden');
+            document.getElementById('results').classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
             
-            document.getElementById('final-score').innerText = `${score} / 10`;
-            
-            const text = document.getElementById('result-text');
-            if (score >= 9) text.innerText = "Nivel de Perito Superior. Posees un dominio excepcional de la metodología científica y los protocolos de la cadena de custodia.";
-            else if (score >= 7) text.innerText = "Apto para la Investigación. Conoces los fundamentos técnicos, pero debes pulir la precisión en casos prácticos complejos.";
-            else text.innerText = "Revisión Metodológica Necesaria. Es vital profundizar en el Tema 14 para evitar la nulidad de pruebas en procesos legales.";
-        }
-
-        function resetQuiz() {
-            currentQ = 0;
-            score = 0;
-            document.getElementById('score-display').innerText = "0";
-            document.getElementById('results-screen').classList.add('hidden');
-            document.getElementById('intro-screen').classList.remove('hidden');
+            const msg = document.getElementById('result-msg');
+            if (score >= 9) msg.innerText = "EXCELENCIA PERICIAL: Dominio absoluto del Tema 14.";
+            else if (score >= 7) msg.innerText = "CAPACIDAD TÉCNICA: Conocimiento sólido con margen de mejora.";
+            else msg.innerText = "REVISIÓN URGENTE: Se recomienda releer los protocolos de Rivera & Gutiérrez.";
         }
     </script>
 </body>
