@@ -1,0 +1,20 @@
+Nombre: Sitio Jekyll CI
+
+nombre:Sitio Jekyll CI:
+  Empujar:
+    Ramas: [ "main" ]
+  pull_request:
+    Ramas: [ "main" ]
+
+Empleos:
+  Construir:
+
+    Runs-on: Ubuntu-último
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the site in the jekyll/builder container
+      run: |
+        docker run \
+        -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
+        jekyll/builder:latest /bin/bash -c "chmod -R 777 /srv/jekyll && jekyll build --future"
