@@ -342,8 +342,6 @@
     </div>
 
     <script>
-        // Array apuntando a las fotos locales del repositorio usando rutas relativas.
-        // Se usa %20 en lugar del espacio para que el navegador resuelva la URL correctamente.
         const questions = [
             {
                 img: "./Indicio%201.png",
@@ -505,10 +503,8 @@
             const q = questions[currentIdx];
             document.getElementById('q-counter').innerHTML = `Folio:<br>${String(currentIdx + 1).padStart(2, '0')} / 10`;
             
-            // Inyectar Imagen Local
             document.getElementById('q-image').src = q.img;
             
-            // Cargar texto
             typeWriter(q.text, document.getElementById('q-text'));
             
             const optionsBox = document.getElementById('options-box');
@@ -522,7 +518,6 @@
                 optionsBox.appendChild(btn);
             });
 
-            // Reloj
             timerInterval = setInterval(() => {
                 timeLeft -= 0.1;
                 document.getElementById('timer-bar').style.width = `${Math.max(0, (timeLeft / 30) * 100)}%`;
@@ -533,7 +528,7 @@
 
                 if(timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    selectOption(-1); // Timeout
+                    selectOption(-1);
                 }
             }, 100);
         }
