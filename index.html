@@ -2,394 +2,607 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criminalística Tema 14 - Rivera & Gutiérrez</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Expediente C-2026/04 | Simulador Pericial</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@300;500&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Nosifer&display=swap');
+
         :root {
-            --neon-blue: #00f2ff;
-            --neon-yellow: #f0ff00;
-            --neon-red: #ff0055;
+            --blood-red: #8a0303;
+            --blood-dark: #4a0000;
             --bg-dark: #050505;
+            --paper: #d1c4b4;
+            --ink: #1a1a1a;
         }
 
-        body { 
-            font-family: 'JetBrains Mono', monospace; 
+        body {
+            font-family: 'Courier Prime', monospace;
             background-color: var(--bg-dark);
+            color: var(--paper);
+            margin: 0;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2vh 0;
             background-image: 
-                linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
-            color: #e2e8f0;
+                radial-gradient(circle at center, transparent 0%, #000 100%),
+                url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.05"/></svg>');
         }
 
-        .font-header { font-family: 'Orbitron', sans-serif; }
-        
-        .cyber-card {
-            background: rgba(10, 10, 15, 0.9);
-            border: 2px solid #1e293b;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 242, 255, 0.05);
+        /* Scanlines CRT Overlay */
+        body::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 950px;
+            min-height: 90dvh;
+            background-color: #121212;
+            border: 2px solid #333;
+            box-shadow: 0 0 40px rgba(138, 3, 3, 0.2), inset 0 0 50px rgba(0,0,0,0.9);
             position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 30px;
         }
 
-        .cyber-card::before {
-            content: "";
+        .splatter {
             position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: linear-gradient(45deg, var(--neon-blue), transparent, var(--neon-yellow));
-            z-index: -1;
-            border-radius: inherit;
-            opacity: 0.3;
+            background: radial-gradient(circle, var(--blood-red) 0%, var(--blood-dark) 60%, transparent 100%);
+            border-radius: 50%;
+            opacity: 0.6;
+            filter: blur(2px);
+            pointer-events: none;
         }
 
-        .btn-option {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.2s ease;
+        .header {
+            border-bottom: 2px solid var(--blood-dark);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: repeating-linear-gradient(45deg, #0a0a0a, #0a0a0a 10px, #111 10px, #111 20px);
         }
 
-        .btn-option:hover:not(:disabled) {
-            background: rgba(0, 242, 255, 0.1);
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
-            transform: scale(1.02);
+        .header h2 {
+            margin: 0;
+            color: var(--blood-red);
+            font-family: 'Nosifer', display;
+            font-size: 1.1rem;
+            text-shadow: 2px 2px 0px #000;
+            line-height: 1.3;
         }
 
-        .caution-bar {
-            background: repeating-linear-gradient(
-                45deg,
-                var(--neon-yellow),
-                var(--neon-yellow) 15px,
-                #000 15px,
-                #000 30px
-            );
+        .content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 50px;
         }
 
-        .scanner-line {
-            position: absolute;
+        #start-screen {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .classified-stamp {
+            color: var(--blood-red);
+            border: 4px solid var(--blood-red);
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 2.2rem;
+            font-weight: bold;
+            transform: rotate(-5deg);
+            opacity: 0.85;
+            margin-bottom: 25px;
+            text-shadow: 0 0 8px var(--blood-red);
+            box-shadow: 0 0 15px var(--blood-red), inset 0 0 15px var(--blood-red);
+        }
+
+        .btn {
+            background-color: transparent;
+            color: var(--paper);
+            border: 1px solid var(--paper);
+            padding: 15px 30px;
+            font-family: 'Courier Prime', monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
             width: 100%;
-            height: 2px;
-            background: var(--neon-blue);
-            opacity: 0.5;
-            box-shadow: 0 0 10px var(--neon-blue);
-            animation: scan 3s linear infinite;
+            max-width: 400px;
+            margin: 0 auto;
+            display: block;
         }
 
-        @keyframes scan {
-            0% { top: 0%; }
-            100% { top: 100%; }
+        .btn:hover, .btn:active {
+            background-color: var(--blood-red);
+            border-color: var(--blood-red);
+            box-shadow: 0 0 20px var(--blood-red);
+            color: #fff;
         }
+
+        .author {
+            margin-top: 50px;
+            font-size: 0.85rem;
+            color: #666;
+            border-top: 1px dashed #333;
+            padding-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        #quiz-screen { display: none; }
+
+        .timer-container {
+            height: 6px;
+            background-color: #000;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+        }
+
+        .timer-fill {
+            height: 100%;
+            background-color: var(--blood-red);
+            width: 100%;
+            box-shadow: 0 0 10px var(--blood-red);
+            transition: width 0.1s linear;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media(min-width: 768px) {
+            .layout { grid-template-columns: 1.2fr 1fr; }
+        }
+
+        .evidence-photo {
+            border: 2px solid #333;
+            background: #000;
+            position: relative;
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+        }
+
+        .evidence-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(80%) sepia(40%) hue-rotate(320deg) contrast(140%) brightness(0.7);
+            transition: filter 0.3s;
+        }
+
+        .evidence-photo:hover img {
+            filter: grayscale(40%) sepia(20%) hue-rotate(320deg) contrast(120%) brightness(0.9);
+        }
+
+        .evidence-photo::after {
+            content: "REGISTRO FOTOGRÁFICO // IJA";
+            position: absolute;
+            bottom: 10px; left: 10px;
+            background: rgba(0,0,0,0.9);
+            color: #aaa;
+            padding: 3px 8px;
+            font-size: 0.75rem;
+            border-left: 2px solid var(--blood-red);
+            letter-spacing: 1px;
+        }
+
+        .situation-text {
+            font-size: 1.1rem;
+            min-height: 100px;
+            line-height: 1.5;
+            color: var(--paper);
+            text-shadow: 0 0 2px rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .opt-btn {
+            background: rgba(10,10,10,0.8);
+            border: 1px solid #444;
+            color: #ccc;
+            padding: 15px;
+            text-align: left;
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            line-height: 1.4;
+        }
+
+        .opt-btn:hover:not(:disabled), .opt-btn:active:not(:disabled) {
+            border-color: #fff;
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        .opt-btn:disabled { cursor: not-allowed; opacity: 0.5; }
+        
+        .opt-btn.correct { 
+            background: rgba(0, 80, 0, 0.4); 
+            border-color: #0f0; 
+            color: #0f0; 
+            text-shadow: 0 0 5px #0f0;
+        }
+        
+        .opt-btn.wrong { 
+            background: rgba(138, 3, 3, 0.4); 
+            border-color: var(--blood-red); 
+            color: #ff4444;
+            text-shadow: 0 0 5px #ff4444;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px dashed var(--blood-red);
+            background: rgba(0,0,0,0.9);
+            display: none;
+            grid-column: 1 / -1;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        #next-btn {
+            float: right;
+            display: none;
+            width: 100%;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-4px) rotate(-1deg); }
+            40%, 80% { transform: translateX(4px) rotate(1deg); }
+        }
+        .shake { animation: shake 0.4s; }
+
+        .danger-pulse { box-shadow: inset 0 0 80px rgba(138,3,3,0.5); }
+
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body>
 
-    <div id="app" class="max-w-3xl w-full cyber-card rounded-3xl overflow-hidden">
-        
-        <!-- PANTALLA INICIAL -->
-        <div id="intro-screen" class="p-8 md:p-12 text-center">
-            <div class="caution-bar h-6 w-full mb-8 rounded-lg shadow-lg"></div>
-            
-            <h2 class="text-blue-400 font-bold tracking-widest text-xs mb-4">CRIMINALÍSTICA CIENTÍFICA</h2>
-            <h1 class="font-header text-5xl md:text-6xl font-extrabold text-white mb-4 tracking-tighter">
-                TEMA <span class="text-yellow-400">14</span>
-            </h1>
-            <p class="text-slate-400 text-sm md:text-base mb-10 max-w-md mx-auto">
-                Evaluación Metodológica de Investigación y Protocolos Forenses
-            </p>
+    <div class="container" id="main-container">
+        <div class="splatter" style="width: 130px; height: 100px; top: -15px; left: -15px;"></div>
+        <div class="splatter" style="width: 200px; height: 200px; bottom: 30px; right: -50px;"></div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10 text-left">
-                <div class="bg-blue-900/10 border border-blue-500/30 p-5 rounded-2xl">
-                    <span class="text-[10px] text-blue-500 font-bold block mb-1">CATEDRÁTICO/INVESTIGADOR</span>
-                    <span class="text-white font-bold">Juan Daniel Rivera Gonzalez</span>
-                </div>
-                <div class="bg-blue-900/10 border border-blue-500/30 p-5 rounded-2xl">
-                    <span class="text-[10px] text-blue-500 font-bold block mb-1">CATEDRÁTICO/INVESTIGADOR</span>
-                    <span class="text-white font-bold">Ricardo Gutiérrez Acevedo</span>
-                </div>
-            </div>
-
-            <button onclick="startQuiz()" class="w-full bg-blue-600 hover:bg-cyan-500 text-white font-header font-bold py-6 rounded-2xl shadow-[0_0_30px_rgba(37,99,235,0.4)] transition-all active:scale-95 group">
-                INICIAR PROTOCOLO TEMA 14
-            </button>
+        <div class="header">
+            <h2>EXPEDIENTE: <br>C-2026/04</h2>
+            <div id="q-counter" style="color: #666; text-align: right; font-size: 0.9rem;">Folio:<br>-- / 10</div>
         </div>
 
-        <!-- INTERFAZ DE PREGUNTAS -->
-        <div id="quiz-ui" class="hidden">
-            <div class="bg-slate-900/80 p-6 border-b border-slate-800 flex justify-between items-center">
-                <div class="flex items-center gap-4">
-                    <div class="text-2xl font-header font-bold text-yellow-400">#<span id="q-idx">1</span></div>
-                    <div class="h-8 w-px bg-slate-700"></div>
+        <div class="content">
+            
+            <div id="start-screen">
+                <div class="classified-stamp">RESTRINGIDO</div>
+                <h1 style="margin-bottom: 10px; font-size: 2rem;">Auditoría de Escena</h1>
+                <p style="color: #888; margin: 0 auto 40px auto; line-height: 1.5; font-size: 0.95rem;">
+                    ADVERTENCIA: Material sensible.<br><br>Evalúa 10 supuestos periciales críticos. 
+                    El reloj corre (30s). Un error metodológico anulará la evidencia en juicio.
+                </p>
+                <button class="btn" onclick="startQuiz()">ROMPER SELLO</button>
+                <div class="author">Director de Protocolo:<br>Perito Juan Daniel Rivera G.</div>
+            </div>
+
+            <div id="quiz-screen">
+                <div class="timer-container">
+                    <div class="timer-fill" id="timer-bar"></div>
+                </div>
+
+                <div class="layout">
+                    <div class="evidence-photo">
+                        <img id="q-image" src="" alt="Evidencia Fotográfica">
+                    </div>
+
                     <div>
-                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Procedimiento Pericial</p>
-                        <p class="text-white text-xs font-bold">Rivera & Gutiérrez</p>
+                        <div class="situation-text" id="q-text"></div>
+                        <div class="options-list" id="options-box"></div>
+                    </div>
+
+                    <div class="feedback" id="feedback-box"></div>
+                    <div style="grid-column: 1 / -1; width: 100%;">
+                        <button class="btn" id="next-btn" onclick="nextQuestion()">SIGUIENTE FOLIO >></button>
                     </div>
                 </div>
-                <div class="text-right">
-                    <p class="text-[10px] text-blue-500 font-bold">PRECISIÓN</p>
-                    <p class="text-2xl font-header font-bold text-white"><span id="score-val">0</span>/10</p>
-                </div>
             </div>
 
-            <div class="w-full bg-slate-800 h-1">
-                <div id="progress-bar" class="h-full bg-cyan-400 shadow-[0_0_10px_#00f2ff] transition-all duration-500"></div>
+            <div id="result-screen" style="display: none; text-align: center; margin-top: 20px;">
+                <h1 style="font-family: 'Nosifer', display; color: var(--blood-red); font-size: 1.8rem; line-height: 1.4;">DICTAMEN<br>EMITIDO</h1>
+                <div style="font-size: 4.5rem; font-weight: bold; margin: 20px 0; color: var(--paper);" id="score-text">0/10</div>
+                <p id="final-verdict" style="font-size: 1.1rem; margin: 0 auto 40px; color: #aaa; line-height: 1.5; padding: 0 10px;"></p>
+                <button class="btn" onclick="location.reload()">REABRIR EXPEDIENTE</button>
             </div>
 
-            <div class="p-6 md:p-8">
-                <div id="img-container" class="w-full h-52 bg-black/40 rounded-2xl mb-8 flex items-center justify-center border border-slate-800 relative overflow-hidden">
-                    <div class="scanner-line"></div>
-                    <!-- SVG dinámico aquí -->
-                </div>
-
-                <h3 id="question-txt" class="text-xl md:text-2xl font-bold text-white mb-8 leading-tight">...</h3>
-
-                <div id="options-box" class="grid grid-cols-1 gap-3">
-                    <!-- 5 Opciones aquí -->
-                </div>
-            </div>
-
-            <div id="feedback-area" class="hidden px-8 pb-8 animate-fade-in">
-                <div id="feedback-box" class="p-5 rounded-2xl border-l-4 mb-6"></div>
-                <button onclick="nextQ()" class="w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-cyan-400 transition-colors">
-                    SIGUIENTE FASE →
-                </button>
-            </div>
-        </div>
-
-        <!-- RESULTADOS -->
-        <div id="results" class="hidden p-12 text-center">
-            <div class="caution-bar h-2 w-24 mx-auto mb-10 rounded-full"></div>
-            <h2 class="font-header text-4xl font-bold text-white mb-2">INFORME FINAL</h2>
-            <div class="inline-block p-12 rounded-full border-2 border-cyan-500/30 bg-cyan-500/5 mb-8">
-                <div class="text-7xl font-header font-bold text-white" id="final-score">0</div>
-                <div class="text-cyan-500 font-bold text-xs tracking-widest">ACIERTOS</div>
-            </div>
-            <p id="result-msg" class="text-slate-400 mb-10 italic"></p>
-            <button onclick="location.reload()" class="w-full border border-slate-700 py-4 rounded-xl text-slate-400 font-bold hover:bg-slate-900 transition">
-                REINICIAR EVALUACIÓN
-            </button>
         </div>
     </div>
 
     <script>
+        // Array apuntando a las fotos locales del repositorio usando rutas relativas.
+        // Se usa %20 en lugar del espacio para que el navegador resuelva la URL correctamente.
         const questions = [
             {
-                q: "¿Qué pilares exige la Tesis 1a. CLXXXVII/2006 para validar la prueba científica?",
-                img: `<svg viewBox="0 0 200 120" class="h-40"><path d="M40 100 L160 100" stroke="#334" stroke-width="4"/><rect x="55" y="40" width="10" height="60" fill="#00f2ff"/><rect x="95" y="30" width="10" height="70" fill="#00f2ff"/><rect x="135" y="50" width="10" height="50" fill="#00f2ff"/><path d="M40 30 L160 30" stroke="#f0ff00" stroke-width="2"/></svg>`,
+                img: "./Indicio%201.png",
+                text: "ESCENA PRIMIGENIA:\nPolicía Operativa localiza una prenda con fluido hemático. El oficial procede a embalarla en una bolsa de plástico hermética para 'evitar derrames'. ¿Cuál es tu instrucción?",
                 options: [
-                    "Experiencia empírica, error conocido y aceptación científica", // Correcta
-                    "Buena fe del perito, años de servicio y cargo institucional",
-                    "Cantidad de testigos, rapidez de entrega y costo del análisis",
-                    "Opinión subjetiva del juez y consenso de la fiscalía",
-                    "Uso de tecnología de punta exclusivamente"
-                ],
-                correct: 0,
-                exp: "El estándar Daubert/Tesis exige verificabilidad, margen de error y validación por pares."
-            },
-            {
-                q: "Dentro de la Trilogía Investigadora, ¿quién ejerce la Conducción Jurídica?",
-                img: `<svg viewBox="0 0 200 120" class="h-40"><circle cx="100" cy="50" r="30" fill="none" stroke="#00f2ff" stroke-width="2" stroke-dasharray="5"/><text x="100" y="55" text-anchor="middle" fill="#00f2ff" font-size="10">M.P.</text><circle cx="60" cy="90" r="15" fill="#334"/><circle cx="140" cy="90" r="15" fill="#334"/></svg>`,
-                options: [
-                    "Los Peritos Forenses",
-                    "El Ministerio Público", // Correcta
-                    "La Policía de Investigación",
-                    "El Juez de Control",
-                    "El Asesor Jurídico de la víctima"
+                    "[Aprobar] El plástico aísla la evidencia y evita contaminación cruzada.",
+                    "[Intervenir] Exigir embalaje en papel/cartón. Se requiere transpiración.",
+                    "[Modificar] Lavar la prenda con solución salina antes de embalar."
                 ],
                 correct: 1,
-                exp: "El MP dirige jurídicamente, la Policía opera y los Peritos aportan la técnica científica."
+                exp: "DICTAMEN: La humedad contenida en el plástico hermético genera proliferación bacteriana que destruye el ADN. La impericia destruyó el valor epistémico de la prueba."
             },
             {
-                q: "¿Cuál de estos eventos genera una Nulidad Absoluta de la prueba?",
-                img: `<svg viewBox="0 0 200 120" class="h-40"><rect x="30" y="40" width="140" height="40" fill="#ff0055" opacity="0.2"/><path d="M30 40 L170 80 M170 40 L30 80" stroke="#ff0055" stroke-width="5"/></svg>`,
+                img: "./Indicio%202.png",
+                text: "TRIBUNAL:\nLa defensa exhibe agresivamente que omitiste un folio y cometiste un error ortográfico en el Registro de Cadena de Custodia. ¿Cuál es el estatus procesal de la evidencia?",
                 options: [
-                    "Errores ortográficos en el etiquetado del indicio",
-                    "Omisión de la hora exacta de recolección",
-                    "Uso de embalaje subóptimo pero no destructivo",
-                    "Alteración deliberada de la escena o siembra de indicios", // Correcta
-                    "Falta de una firma en el folio de traslado"
-                ],
-                correct: 3,
-                exp: "La alteración deliberada rompe la trazabilidad y el debido proceso de forma irreparable."
-            },
-            {
-                q: "En fotografía forense, ¿para qué sirve específicamente el Testigo Métrico?",
-                img: `<svg viewBox="0 0 200 120" class="h-40"><rect x="50" y="80" width="100" height="15" fill="#f0ff00"/><path d="M60 80 v15 M80 80 v10 M100 80 v15" stroke="black" stroke-width="1"/><circle cx="100" cy="40" r="20" fill="#00f2ff"/></svg>`,
-                options: [
-                    "Para iluminar zonas con poca visibilidad",
-                    "Para dar una referencia de escala y dimensión real del indicio", // Correcta
-                    "Para identificar al perito que tomó la fotografía",
-                    "Para señalar la dirección del norte magnético",
-                    "Para evitar que la lente de la cámara se desenfoque"
-                ],
-                correct: 1,
-                exp: "Sin escala, es imposible conocer el tamaño real de un indicio en una fotografía técnica."
-            },
-            {
-                q: "¿Qué estudia la Balística Exterior específicamente?",
-                img: `<svg viewBox="0 0 200 120" class="h-40"><path d="M20 100 Q 100 0 180 100" stroke="#00f2ff" stroke-width="2" fill="none" stroke-dasharray="5"/><circle cx="100" cy="25" r="4" fill="#f0ff00"/></svg>`,
-                options: [
-                    "La presión de gases dentro de la recámara",
-                    "Las marcas de la aguja percutora en el fulminante",
-                    "El vuelo del proyectil, trayectoria y efectos de la gravedad", // Correcta
-                    "Los daños causados en el cuerpo de la víctima",
-                    "La composición química de la pólvora incombusta"
+                    "Nulidad Absoluta. Violación al debido proceso y ruptura de trazabilidad.",
+                    "Desechamiento cautelar por falta de Idoneidad Metodológica.",
+                    "Prueba Admitida. Es una 'falla tolerable', aunque su credibilidad será atacada."
                 ],
                 correct: 2,
-                exp: "Comienza cuando el proyectil sale del cañón y termina al impactar el objetivo."
+                exp: "DICTAMEN: Los errores tipográficos u omisión ortográfica de folios sobreviven el filtro de legalidad procesal, pero te vuelven altamente vulnerable en el estrado."
             },
             {
-                q: "¿Qué caracteriza a una Huella de Derrape en hechos de tránsito?",
-                img: `<svg viewBox="0 0 200 120" class="h-40"><path d="M40 100 Q 100 100 160 40" stroke="#00f2ff" stroke-width="8" fill="none" stroke-dasharray="10"/></svg>`,
+                img: "./Indicio%203.png",
+                text: "FIJACIÓN FOTOGRÁFICA:\nEncuentras un casquillo percutido. Ajustas la cámara para un 'Primer Plano'. Si omites este elemento en la toma, la defensa alegará siembra o manipulación espacial:",
                 options: [
-                    "Neumático bloqueado arrastrando en línea recta",
-                    "Pérdida de adherencia por fuerza centrífuga lateral", // Correcta
-                    "Aceleración brusca desde el reposo",
-                    "Frenado intermitente con sistema ABS",
-                    "Impacto frontal contra objeto fijo"
-                ],
-                correct: 1,
-                exp: "El derrape implica un desplazamiento lateral, a diferencia de la frenada que es longitudinal."
-            },
-            {
-                q: "En un incendio, ¿qué indica el vértice de un patrón en forma de 'V'?",
-                img: `<svg viewBox="0 0 200 120" class="h-40"><path d="M100 100 L50 20 M100 100 L150 20" stroke="#ff0055" stroke-width="4"/><circle cx="100" cy="100" r="5" fill="#f0ff00"/></svg>`,
-                options: [
-                    "El punto de origen o inicio del fuego", // Correcta
-                    "La zona de mayor acumulación de gases tóxicos",
-                    "El lugar donde se aplicó el extintor",
-                    "La marca de un acelerante líquido (gasolina)",
-                    "El punto de salida de las llamas al exterior"
+                    "El testigo métrico.",
+                    "Plano panorámico de fondo.",
+                    "Macrofotografía del percutor."
                 ],
                 correct: 0,
-                exp: "El fuego tiende a subir y expandirse, dejando un vértice en el punto de ignición inicial."
+                exp: "DICTAMEN: Los Primeros Planos exigen testigo métrico. Si la posición espacial del indicio cambia milimétricamente sin referencia, la descontextualización arruina el caso."
             },
             {
-                q: "¿Cuál es el fundamento científico de la Grafoscopía?",
-                img: `<svg viewBox="0 0 200 120" class="h-40"><path d="M40 80 L160 40" stroke="#00f2ff" stroke-width="2"/><path d="M150 40 Q 150 90 100 90" stroke="#f0ff00" stroke-width="1" fill="none"/></svg>`,
+                img: "./Indicio%204.png",
+                text: "BALÍSTICA:\nEl sistema IBIS acaba de arrojar un 'Hit' conectando el proyectil incriminado con el arma del sospechoso. El fiscal te presiona para firmar condena. ¿Qué respondes?",
                 options: [
-                    "La calidad del papel y su gramaje",
-                    "La oxidación de las tintas comerciales",
-                    "El tipo de bolígrafo o pluma fuente utilizado",
-                    "La acción neuromuscular y automatismos cerebrales", // Correcta
-                    "El contenido literario y emocional del texto"
-                ],
-                correct: 3,
-                exp: "La escritura es un proceso cerebral automático; los gestos invisibles son imposibles de falsificar."
-            },
-            {
-                q: "Según Vucetich, ¿qué define a las huellas dactilares?",
-                img: `<svg viewBox="0 0 200 120" class="h-40"><path d="M100 20 C 60 20 60 100 100 100 C 140 100 140 20 100 20" stroke="#00f2ff" stroke-width="1" fill="none"/><circle cx="100" cy="60" r="3" fill="#f0ff00"/></svg>`,
-                options: [
-                    "Que se borran con el paso de los años",
-                    "Que son iguales en gemelos idénticos",
-                    "Que son perennes, inmutables y diversiformes", // Correcta
-                    "Que dependen de la alimentación de la persona",
-                    "Que solo se encuentran en los dedos de las manos"
+                    "Firma validada. El algoritmo IBIS constituye prueba científica plena.",
+                    "Firma retenida. Se requiere prueba de Rodizonato de Sodio.",
+                    "Firma retenida. El Hit es probabilidad; exige microcomparación (ojo a ojo)."
                 ],
                 correct: 2,
-                exp: "No cambian, no se borran y no hay dos iguales en el mundo."
+                exp: "DICTAMEN: Alerta Probatoria: Un 'Hit' automatizado nunca es certeza. La certeza jurídica exige indiscutiblemente la microcomparación física bajo el microscopio por el perito."
             },
             {
-                q: "¿Para qué sirve la Ninhidrina en dactiloscopía latente?",
-                img: `<svg viewBox="0 0 200 120" class="h-40"><path d="M80 40 h40 v60 h-40 z" fill="#334"/><path d="M130 50 c 20 0 20 40 0 40" stroke="#ff0055" stroke-width="4"/></svg>`,
+                img: "./Indicio%205.png",
+                text: "HECHOS DE TRÁNSITO:\nLlegas al asfalto y observas una huella neumática en forma de arco pronunciado. La cinemática indica que la rueda perdía adherencia lateralmente. Tipificación:",
                 options: [
-                    "Para revelar huellas en cristal o metal",
-                    "Para limpiar la escena de rastros biológicos",
-                    "Para fijar huellas de pisadas en lodo",
-                    "Para reaccionar con aminoácidos en papel (Púrpura de Ruhemann)", // Correcta
-                    "Para detectar rastros de explosivos C4"
+                    "Huella de Frenado (arrastre longitudinal).",
+                    "Huella de Derrape (fuerza centrífuga lateral).",
+                    "Huella de Aceleración Brusca."
                 ],
-                correct: 3,
-                exp: "Es el reactivo estándar para superficies porosas, revelando huellas invisibles en documentos."
+                correct: 1,
+                exp: "DICTAMEN: El derrape ocurre cuando la rueda en movimiento pierde adherencia por fuerza centrífuga lateral. El frenado bloquea el neumático en línea recta."
+            },
+            {
+                img: "./Indicio%206.png",
+                text: "INCENDIOS:\nEn el vértice de un 'Patrón en V' localizas cableado derretido con formaciones globulares conocidas como 'Perlas de fusión'. ¿Cuál es su utilidad pericial?",
+                options: [
+                    "Identificar el uso de sustancias detonantes (C4, TNT).",
+                    "Mapeo topográfico para determinar la secuencia cronológica del corto.",
+                    "Medir la transferencia de energía y la temperatura máxima."
+                ],
+                correct: 1,
+                exp: "DICTAMEN: Siguiendo la NFPA 921, las perlas de fusión crean un mapa cronológico irrefutable del origen del cortocircuito."
+            },
+            {
+                img: "./Indicio%207.png",
+                text: "DOCUMENTOSCOPÍA:\nEl demandado jura que el acreedor cometió 'abuso de firma en blanco', imprimiendo la deuda DESPUÉS de que él firmó. ¿Qué análisis microscópico te dará la verdad?",
+                options: [
+                    "Búsqueda de intersección (Texto impreso SOBRE firma manuscrita).",
+                    "Análisis de presión rítmica subconsciente del trazo.",
+                    "Reacción a luz UV de las fibrillas del papel."
+                ],
+                correct: 0,
+                exp: "DICTAMEN: La superposición microscópica demuestra científicamente el orden cronológico de los trazos, probando la alteración física del documento."
+            },
+            {
+                img: "./Indicio%208.png",
+                text: "REVELADO LATENTE:\nTienes una nota de rescate en papel común (superficie porosa). Polvos magnéticos arruinarían el rastro. ¿Qué químico utilizas para reaccionar con los aminoácidos?",
+                options: [
+                    "Cianoacrilato (Vapores de superpegamento).",
+                    "Solución de Rodizonato de Sodio.",
+                    "Aspersión de Ninhidrina (Púrpura de Ruhemann)."
+                ],
+                correct: 2,
+                exp: "DICTAMEN: Las superficies porosas absorben el sudor. La Ninhidrina es el reactivo rey porque se ancla a los aminoácidos del fluido dactilar."
+            },
+            {
+                img: "./Indicio%209.png",
+                text: "LOFOSCOPÍA:\nBajo la lupa, observas un dactilograma diversiforme. Ubicas 1 delta a la derecha y líneas fluyendo en bucle hacia la izquierda. Taxonomía de Vucetich:",
+                options: [
+                    "Verticilo.",
+                    "Presilla Interna.",
+                    "Presilla Externa."
+                ],
+                correct: 1,
+                exp: "DICTAMEN: Vucetich establece: 1 delta a la derecha con líneas fugando a la izquierda = Presilla Interna."
+            },
+            {
+                img: "./Indicio%2010.png",
+                text: "CRISIS FORENSE:\nFosa clandestina. Restos óseos sin tejido blando. Interpol exige un 'Identificador Primario' para dar certeza de identidad. ¿Cuál aplicas?",
+                options: [
+                    "Reconocimiento de tatuajes y malformaciones por familiares.",
+                    "Genética Molecular (ADN) u Odontología Forense (Cefalometría).",
+                    "Efectos personales anexos al cuerpo (ropa, identificaciones)."
+                ],
+                correct: 1,
+                exp: "DICTAMEN: Ropa y tatuajes son secundarios. El estándar científico internacional exige ADN, Odontología o Dactiloscopía como factores irrefutables."
             }
         ];
 
-        let currentQ = 0;
+        let currentIdx = 0;
         let score = 0;
-        let canAnswer = true;
+        let timerInterval;
+        let timeLeft = 30; 
+        const container = document.getElementById('main-container');
+
+        let typeInterval;
+        let isTyping = false;
+
+        function typeWriter(text, element, speed = 20) {
+            clearInterval(typeInterval);
+            element.innerHTML = '';
+            let i = 0;
+            isTyping = true;
+            typeInterval = setInterval(() => {
+                if (i < text.length) {
+                    if(text.charAt(i) === '\n') {
+                        element.innerHTML += '<br><br>';
+                    } else {
+                        element.innerHTML += text.charAt(i);
+                    }
+                    i++;
+                } else {
+                    clearInterval(typeInterval);
+                    isTyping = false;
+                }
+            }, speed);
+        }
 
         function startQuiz() {
-            document.getElementById('intro-screen').classList.add('hidden');
-            document.getElementById('quiz-ui').classList.remove('hidden');
-            renderQ();
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            window.scrollTo(0, 0);
+            loadQuestion();
         }
 
-        function renderQ() {
-            canAnswer = true;
-            const q = questions[currentQ];
-            document.getElementById('q-idx').innerText = currentQ + 1;
-            document.getElementById('question-txt').innerText = q.q;
-            document.getElementById('img-container').innerHTML = `<div class="scanner-line"></div>${q.img}`;
-            document.getElementById('progress-bar').style.width = `${(currentQ / questions.length) * 100}%`;
+        function loadQuestion() {
+            clearInterval(timerInterval);
+            timeLeft = 30;
+            document.getElementById('timer-bar').style.width = '100%';
             
-            const box = document.getElementById('options-box');
-            box.innerHTML = '';
+            container.classList.remove('danger-pulse');
+            document.getElementById('feedback-box').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
             
-            // Generar los 5 incisos
-            q.options.forEach((opt, i) => {
+            const q = questions[currentIdx];
+            document.getElementById('q-counter').innerHTML = `Folio:<br>${String(currentIdx + 1).padStart(2, '0')} / 10`;
+            
+            // Inyectar Imagen Local
+            document.getElementById('q-image').src = q.img;
+            
+            // Cargar texto
+            typeWriter(q.text, document.getElementById('q-text'));
+            
+            const optionsBox = document.getElementById('options-box');
+            optionsBox.innerHTML = '';
+            
+            q.options.forEach((opt, index) => {
                 const btn = document.createElement('button');
-                btn.className = "btn-option w-full text-left p-4 rounded-xl flex items-center gap-4 group";
-                btn.innerHTML = `
-                    <div class="w-10 h-10 rounded-lg bg-slate-900 border border-slate-700 flex items-center justify-center text-cyan-400 font-bold group-hover:border-cyan-400 transition-all shrink-0">
-                        ${String.fromCharCode(65 + i)}
-                    </div>
-                    <span class="text-sm md:text-base text-slate-300 group-hover:text-white transition-colors">${opt}</span>
-                `;
-                btn.onclick = () => checkAns(i, btn);
-                box.appendChild(btn);
+                btn.className = 'opt-btn';
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(index);
+                optionsBox.appendChild(btn);
             });
 
-            document.getElementById('feedback-area').classList.add('hidden');
+            // Reloj
+            timerInterval = setInterval(() => {
+                timeLeft -= 0.1;
+                document.getElementById('timer-bar').style.width = `${Math.max(0, (timeLeft / 30) * 100)}%`;
+                
+                if(timeLeft <= 10 && !container.classList.contains('danger-pulse')) {
+                    container.classList.add('danger-pulse');
+                }
+
+                if(timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    selectOption(-1); // Timeout
+                }
+            }, 100);
         }
 
-        function checkAns(idx, btn) {
-            if (!canAnswer) return;
-            canAnswer = false;
-
-            const q = questions[currentQ];
-            const fBox = document.getElementById('feedback-box');
-            const btns = document.querySelectorAll('.btn-option');
-
-            btns.forEach(b => b.disabled = true);
-
-            if (idx === q.correct) {
-                score++;
-                btn.classList.add('border-cyan-500', 'bg-cyan-500/10');
-                fBox.className = "p-5 rounded-2xl border-l-4 border-cyan-500 bg-cyan-500/5 text-cyan-100";
-                fBox.innerHTML = `<h4 class="font-bold mb-1 text-cyan-400 tracking-widest text-xs">VALIDACIÓN EXITOSA</h4><p class="text-sm opacity-80">${q.exp}</p>`;
-            } else {
-                btn.classList.add('border-red-500', 'bg-red-500/10');
-                btns[q.correct].classList.add('border-cyan-500/40', 'bg-cyan-500/5');
-                fBox.className = "p-5 rounded-2xl border-l-4 border-red-500 bg-red-500/5 text-red-100";
-                fBox.innerHTML = `<h4 class="font-bold mb-1 text-red-400 tracking-widest text-xs">DISCREPANCIA METODOLÓGICA</h4><p class="text-sm opacity-80">${q.exp}</p>`;
-            }
-
-            document.getElementById('score-val').innerText = score;
-            document.getElementById('feedback-area').classList.remove('hidden');
-        }
-
-        function nextQ() {
-            currentQ++;
-            if (currentQ < questions.length) {
-                renderQ();
-            } else {
-                showFinal();
-            }
-        }
-
-        function showFinal() {
-            document.getElementById('quiz-ui').classList.add('hidden');
-            document.getElementById('results').classList.remove('hidden');
-            document.getElementById('final-score').innerText = score;
+        function selectOption(idx) {
+            clearInterval(timerInterval);
+            clearInterval(typeInterval);
             
-            const msg = document.getElementById('result-msg');
-            if (score >= 9) msg.innerText = "EXCELENCIA PERICIAL: Dominio absoluto del Tema 14.";
-            else if (score >= 7) msg.innerText = "CAPACIDAD TÉCNICA: Conocimiento sólido con margen de mejora.";
-            else msg.innerText = "REVISIÓN URGENTE: Se recomienda releer los protocolos de Rivera & Gutiérrez.";
+            if(isTyping) {
+                let fullText = questions[currentIdx].text.replace(/\n/g, '<br><br>');
+                document.getElementById('q-text').innerHTML = fullText;
+            }
+
+            container.classList.remove('danger-pulse');
+            
+            const q = questions[currentIdx];
+            const buttons = document.querySelectorAll('.opt-btn');
+            
+            buttons.forEach((btn, i) => {
+                btn.disabled = true;
+                if(i === q.correct) btn.classList.add('correct');
+            });
+
+            const fBox = document.getElementById('feedback-box');
+            if(idx === q.correct) {
+                score++;
+                fBox.innerHTML = `<strong style="color:#0f0;">[ACIERTO]</strong><br><br>${q.exp}`;
+            } else {
+                if(idx !== -1) buttons[idx].classList.add('wrong');
+                container.classList.add('shake');
+                setTimeout(() => container.classList.remove('shake'), 300);
+                
+                let reason = idx === -1 ? "[TIEMPO AGOTADO]" : "[ERROR CRÍTICO]";
+                fBox.innerHTML = `<strong style="color:#ff4444;">${reason}</strong><br><br>${q.exp}`;
+            }
+
+            fBox.style.display = 'block';
+            document.getElementById('next-btn').style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('next-btn').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if(currentIdx < questions.length) {
+                loadQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('score-text').innerText = `${score}/10`;
+            
+            const fb = document.getElementById('final-verdict');
+            if(score >= 9) {
+                fb.innerHTML = "ESTADO: <span style='color:#0f0'>ÓPTIMO</span><br><br>Idoneidad metodológica impecable. Estás listo para defender el estándar probatorio ante cualquier juez.";
+            } else if(score >= 7) {
+                fb.innerHTML = "ESTADO: <span style='color:orange'>VULNERABLE</span><br><br>Sólido en la teoría, pero el contrainterrogatorio explotará tus dudas. Revisa la matriz de control de legalidad.";
+            } else {
+                fb.innerHTML = "ESTADO: <span style='color:red'>COMPROMETIDO</span><br><br>Cadena de custodia destruida. La defensa logró exclusión probatoria por negligencia de campo.";
+            }
+            window.scrollTo(0, 0);
         }
     </script>
 </body>
 </html>
-
